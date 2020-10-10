@@ -1,7 +1,7 @@
 import * as builtInMatchers from "./matchers.ts";
 import type { Matcher, Matchers } from "./matchers.ts";
 
-import { AssertionError } from "https://deno.land/std@v0.50.0/testing/asserts.ts";
+import { AssertionError } from "https://deno.land/std@0.69.0/testing/asserts.ts";
 
 interface Expected {
   toBe(candidate: any): void;
@@ -18,6 +18,7 @@ interface Expected {
   toHaveLength(length: number): void;
   toContain(item: any): void;
   toThrow(error?: RegExp | string): void;
+  toThrowError(error?: RegExp | string | ErrorConstructor | Error): void;
   toBeGreaterThan(number: number): void;
   toBeGreaterThanOrEqual(number: number): void;
   toBeLessThan(number: number): void;
@@ -33,10 +34,16 @@ interface Expected {
   toHaveLastReturnedWith(value: any): void;
   toHaveNthReturnedWith(nthCall: number, value: any): void;
 
-  not: Expected;
-  resolves: Expected;
-  rejects: Expected;
+  not: Promisify<Expected>;
+  resolves: Promisify<Expected>;
+  rejects: Promisify<Expected>;
 }
+
+type Promisify<T> = {
+  [K in keyof T]: T[K] extends (...args: any[]) => any
+    ? (...args: Parameters<T[K]>) => Promise<ReturnType<T[K]>>
+    : T[K];
+};
 
 const matchers: Record<any, Matcher> = {
   ...builtInMatchers,
@@ -55,6 +62,9 @@ export function expect(value: any): Expected {
         }
 
         if (name === "resolves") {
+          if (typeof value === "function") {
+            value = value();
+          }
           if (!(value instanceof Promise)) {
             throw new AssertionError("expected value must be a Promise");
           }
@@ -64,6 +74,9 @@ export function expect(value: any): Expected {
         }
 
         if (name === "rejects") {
+          if (typeof value === "function") {
+            value = value();
+          }
           if (!(value instanceof Promise)) {
             throw new AssertionError("expected value must be a Promise");
           }

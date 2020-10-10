@@ -1,6 +1,11 @@
 name: ci
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+  # daily check at 01:00 AM
+  schedule:
+    - cron: '0 1 * * *'
 
 jobs:
   build:
@@ -8,9 +13,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@master
-      - uses: denolib/setup-deno@master
-        with:
-          deno-version: 1.0.0-rc1
-      - run: |
-          deno fmt --check
-          deno test -A
+      
+      - name: setup deno
+        uses: denolib/setup-deno@v2
+
+      - name: run deno test
+        run: deno test -A
+         

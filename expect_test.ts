@@ -1,10 +1,10 @@
 import {
   assertEquals,
-  assertThrows,
   AssertionError,
+  assertThrows,
 } from "https://deno.land/std@v0.50.0/testing/asserts.ts";
 
-import { expect, addMatchers } from "./expect.ts";
+import { addMatchers, expect } from "./expect.ts";
 import * as mock from "./mock.ts";
 
 async function assertPass(fn: Function) {
@@ -738,5 +738,37 @@ Deno.test({
         expect(m).toHaveNthReturnedWith(1, 1);
       },
     );
+  },
+});
+
+Deno.test({
+  name: "testRejectPromiseFunction",
+  fn: async () => {
+    await expect(() => Promise.reject(new TypeError())).rejects.toThrow();
+    await expect(() => Promise.resolve(1)).resolves.toBe(1);
+    await expect(() => Promise.resolve(1)).resolves.not.toBe(2);
+  },
+});
+
+Deno.test({
+  name: "testThrowTypedError",
+  fn: async () => {
+    await expect(() => Promise.reject(new TypeError())).rejects.toThrowError(
+      TypeError,
+    );
+    const err = new TypeError("22");
+    await expect(() => Promise.reject(err)).rejects.toThrowError(
+      "22",
+    );
+
+    await expect(() => Promise.reject(err)).rejects.toThrowError(
+      err,
+    );
+
+    await expect(async () => {
+      await expect(() => Promise.reject(err)).rejects.toThrowError(
+        new TypeError("22"),
+      );
+    }).rejects.toThrow();
   },
 });

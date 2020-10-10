@@ -1,38 +1,38 @@
 import {
   assert,
   assertEquals,
-} from "https://deno.land/std@v0.50.0/testing/asserts.ts";
+} from "https://deno.land/std@0.69.0/testing/asserts.ts";
 import * as mock from "./mock.ts";
 
 import {
+  MatchResult,
   toBe,
+  toBeDefined,
+  toBeFalsy,
   toBeGreaterThan,
+  toBeInstanceOf,
   toBeLessThan,
   toBeLessThanOrEqual,
-  toEqual,
-  toBeTruthy,
-  toBeFalsy,
-  toBeDefined,
-  toBeUndefined,
-  toBeNull,
   toBeNaN,
-  toBeInstanceOf,
-  toMatch,
-  toHaveLength,
-  toHaveProperty,
+  toBeNull,
+  toBeTruthy,
+  toBeUndefined,
   toContain,
-  toThrow,
-  MatchResult,
+  toEqual,
   toHaveBeenCalled,
   toHaveBeenCalledTimes,
   toHaveBeenCalledWith,
   toHaveBeenLastCalledWith,
   toHaveBeenNthCalledWith,
-  toHaveReturnedWith,
-  toHaveReturned,
   toHaveLastReturnedWith,
-  toHaveReturnedTimes,
+  toHaveLength,
   toHaveNthReturnedWith,
+  toHaveProperty,
+  toHaveReturned,
+  toHaveReturnedTimes,
+  toHaveReturnedWith,
+  toMatch,
+  toThrow,
 } from "./matchers.ts";
 
 function assertResult(actual: MatchResult, expected: MatchResult) {
@@ -328,14 +328,14 @@ Deno.test({
       pass: false,
       message: `expect(actual).toMatch(expected)
   
-                expected yo to contain hell`,
+                expected "yo" to contain "hell"`,
     });
 
     assertResult(toMatch("yo", /^hell/), {
       pass: false,
       message: `expect(actual).toMatch(expected)
 
-                yo did not match regex /^hell/`,
+                "yo" did not match regex /^hell/`,
     });
   },
 });
@@ -354,7 +354,7 @@ Deno.test({
       pass: false,
       message: `expect(actual).toHaveProperty(expected)
       
-                { a: 1 } did not contain property b`,
+                { a: 1 } did not contain property "b"`,
     });
   },
 });
@@ -439,7 +439,7 @@ Deno.test({
         pass: false,
         message: `expect(actual).toThrow(expected)
       
-                  expected [Function] to throw error matching TEST but it threw Error: BLAH`,
+                  expected [Function] to throw error matching "TEST" but it threw Error: BLAH`,
       },
     );
 
