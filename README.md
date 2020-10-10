@@ -5,7 +5,7 @@
 A deno implementation of `expect` in order to write tests in a more `jest` like style.
 
 ```typescript
-import { expect } from "https://cdn.jsdelivr.net/gh/Soontao/expect@0.2.2/mod.ts";
+import { expect } from "https://cdn.jsdelivr.net/gh/Soontao/expect@0.3.0/mod.ts";
 
 expect(10).toEqual(10);
 expect(Promise.resolve(20)).resolves.toEqual(20);
