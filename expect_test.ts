@@ -776,5 +776,11 @@ Deno.test({
     await expect(Promise.reject(err)).rejects.toThrowError(
       err,
     );
+
+    await expect(async () => {
+      throw new Error("350");
+    }).rejects.toThrowError(
+      "350",
+    );
   },
 });

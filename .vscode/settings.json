@@ -9,5 +9,6 @@
     },
     "cSpell.words": [
         "Deno"
-    ]
+    ],
+    "debug.javascript.unmapMissingSources": true
 }
