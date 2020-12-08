@@ -362,27 +362,6 @@ export function toContain(value: any, item: any): MatchResult {
   }
 }
 
-export function toThrowError(
-  actual: any,
-  error?: (...args: any[]) => any | RegExp | string,
-): MatchResult {
-  if (error?.constructor === Function && error?.prototype instanceof Error) {
-    if (actual instanceof error) {
-      return { pass: true };
-    }
-    return buildFail(
-      `expect(${ACTUAL}).toThrowError(${EXPECTED})\n\nexpected to throw error ${
-        green(createStr(error))
-      } instance but it threw ${red(createStr(actual))}`,
-    );
-  } else if (error instanceof Error) {
-    return toBe(actual, error);
-  } else {
-    // @ts-ignore
-    return toThrow(actual, error);
-  }
-}
-
 export function toThrow(value: any, error?: RegExp | string): MatchResult {
   let fn;
   if (typeof value === "function") {
@@ -398,7 +377,19 @@ export function toThrow(value: any, error?: RegExp | string): MatchResult {
   const errorString = createStr(error);
 
   if (value instanceof Error) {
-    if (typeof error === "string") {
+    if (
+      error?.constructor === Function &&
+      (error as any)?.prototype instanceof Error
+    ) {
+      if (value instanceof <any> error) {
+        return { pass: true };
+      }
+      return buildFail(
+        `expect(${ACTUAL}).toThrowError(${EXPECTED})\n\nexpected to throw error ${
+          green(createStr(error))
+        } instance but it threw ${red(createStr(value))}`,
+      );
+    } else if (typeof error === "string") {
       if (!value.message.includes(error)) {
         return buildFail(
           `expect(${ACTUAL}).toThrow(${EXPECTED})\n\nexpected ${
@@ -439,6 +430,8 @@ export function toThrow(value: any, error?: RegExp | string): MatchResult {
     );
   }
 }
+
+export const toThrowError = toThrow;
 
 function extractMockCalls(
   value: any,

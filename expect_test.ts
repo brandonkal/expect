@@ -756,19 +756,25 @@ Deno.test({
     await expect(() => Promise.reject(new TypeError())).rejects.toThrowError(
       TypeError,
     );
+
+    await expect(Promise.reject(new TypeError())).rejects.toThrowError(
+      TypeError,
+    );
+
     const err = new TypeError("22");
     await expect(() => Promise.reject(err)).rejects.toThrowError(
+      "22",
+    );
+
+    await expect(Promise.reject(err)).rejects.toThrowError(
       "22",
     );
 
     await expect(() => Promise.reject(err)).rejects.toThrowError(
       err,
     );
-
-    await expect(async () => {
-      await expect(() => Promise.reject(err)).rejects.toThrowError(
-        new TypeError("22"),
-      );
-    }).rejects.toThrow();
+    await expect(Promise.reject(err)).rejects.toThrowError(
+      err,
+    );
   },
 });
