@@ -1,20 +1,20 @@
 import {
   AssertionError,
   equal,
-} from "https://deno.land/std@0.79.0/testing/asserts.ts";
+} from "https://deno.land/std@0.91.0/testing/asserts.ts";
 
 import {
   diff,
   DiffResult,
   DiffType,
-} from "https://deno.land/std@0.79.0/testing/_diff.ts";
+} from "https://deno.land/std@0.91.0/testing/_diff.ts";
 import {
   bold,
   gray,
   green,
   red,
   white,
-} from "https://deno.land/std@0.79.0/fmt/colors.ts";
+} from "https://deno.land/std@0.91.0/fmt/colors.ts";
 
 import * as mock from "./mock.ts";
 
