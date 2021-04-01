@@ -1,6 +1,6 @@
 import * as builtInMatchers from "./matchers.ts";
 import type { Matcher, Matchers } from "./matchers.ts";
-
+import { isPromise } from "./utils.ts";
 import { AssertionError } from "https://deno.land/std@0.79.0/testing/asserts.ts";
 
 interface Expected {
@@ -65,7 +65,7 @@ export function expect(value: any): Expected {
           if (typeof value === "function") {
             value = value();
           }
-          if (!(value instanceof Promise)) {
+          if (!isPromise(value)) {
             throw new AssertionError("expected value must be a Promise");
           }
 
@@ -77,12 +77,12 @@ export function expect(value: any): Expected {
           if (typeof value === "function") {
             value = value();
           }
-          if (!(value instanceof Promise)) {
+          if (!isPromise(value)) {
             throw new AssertionError("expected value must be a Promise");
           }
 
           value = value.then(
-            (value) => {
+            (value: any) => {
               throw new AssertionError(
                 `Promise did not reject. resolved to ${value}`,
               );
