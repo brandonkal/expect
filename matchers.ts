@@ -1,20 +1,21 @@
 import {
+  assertEquals,
   AssertionError,
   equal,
-} from "https://deno.land/std@0.91.0/testing/asserts.ts";
+} from "https://deno.land/std@0.92.0/testing/asserts.ts";
 
 import {
   diff,
   DiffResult,
   DiffType,
-} from "https://deno.land/std@0.91.0/testing/_diff.ts";
+} from "https://deno.land/std@0.92.0/testing/_diff.ts";
 import {
   bold,
   gray,
   green,
   red,
   white,
-} from "https://deno.land/std@0.91.0/fmt/colors.ts";
+} from "https://deno.land/std@0.92.0/fmt/colors.ts";
 
 import * as mock from "./mock.ts";
 
@@ -118,6 +119,19 @@ export function toEqual(actual: any, expected: any): MatchResult {
 
   return buildFail(
     `expect(${ACTUAL}).toEqual(${EXPECTED})\n\n${
+      buildDiffMessage(
+        actual,
+        expected,
+      )
+    }`,
+  );
+}
+
+export function toStrictEqual(actual: any, expected: any): MatchResult {
+  if (equal(actual, expected)) return { pass: true };
+
+  return buildFail(
+    `expect(${ACTUAL}).toStrictEqual(${EXPECTED})\n\n${
       buildDiffMessage(
         actual,
         expected,

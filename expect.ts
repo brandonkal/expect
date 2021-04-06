@@ -1,7 +1,7 @@
 import * as builtInMatchers from "./matchers.ts";
 import type { Matcher, Matchers } from "./matchers.ts";
 import { isPromise } from "./utils.ts";
-import { AssertionError } from "https://deno.land/std@0.91.0/testing/asserts.ts";
+import { AssertionError } from "https://deno.land/std@0.92.0/testing/asserts.ts";
 
 interface Expected {
   toBe(candidate: any): void;

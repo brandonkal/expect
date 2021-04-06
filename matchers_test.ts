@@ -1,7 +1,7 @@
 import {
   assert,
   assertEquals,
-} from "https://deno.land/std@0.91.0/testing/asserts.ts";
+} from "https://deno.land/std@0.92.0/testing/asserts.ts";
 import * as mock from "./mock.ts";
 
 import {
@@ -32,6 +32,7 @@ import {
   toHaveReturnedTimes,
   toHaveReturnedWith,
   toMatch,
+  toStrictEqual,
   toThrow,
 } from "./matchers.ts";
 
@@ -91,6 +92,9 @@ Deno.test({
     assertResultPass(toEqual({ a: 1 }, { a: 1 }));
     assertResultPass(toEqual(1, 1));
     assertResultPass(toEqual([1], [1]));
+    assertResultPass(toStrictEqual({ a: 1 }, { a: 1 }));
+    assertResultPass(toStrictEqual(1, 1));
+    assertResultPass(toStrictEqual([1], [1]));
   },
 });
 
@@ -105,6 +109,18 @@ Deno.test({
     assertResult(toEqual({ a: 1 }, { a: 2 }), {
       pass: false,
       message: `expect(actual).toEqual(expected)
+                -   { a: 1 }
+                +   { a: 2 }`,
+    });
+
+    assertResult(toStrictEqual(10, 20), {
+      pass: false,
+      message: `expect(actual).toStrictEqual(expected)\n\n-   10\n+   20`,
+    });
+
+    assertResult(toStrictEqual({ a: 1 }, { a: 2 }), {
+      pass: false,
+      message: `expect(actual).toStrictEqual(expected)
                 -   { a: 1 }
                 +   { a: 2 }`,
     });
