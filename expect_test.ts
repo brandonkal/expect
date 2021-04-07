@@ -380,11 +380,13 @@ Deno.test({
     await assertAllPass(
       () => expect([1, 2, 3]).toContain(2),
       () => expect([]).not.toContain(2),
+      () => expect("hello world").toContain("world"),
     );
 
     await assertAllFail(
       () => expect([1, 2, 3]).toContain(4),
       () => expect([]).toContain(4),
+      () => expect("hello world").toContain("America"),
     );
   },
 });

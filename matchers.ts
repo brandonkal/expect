@@ -212,7 +212,7 @@ export function toBeTruthy(value: any): MatchResult {
   const actualString = createStr(value);
 
   return buildFail(`expect(${ACTUAL}).toBeTruthy()
-  
+
       ${red(actualString)} is not truthy`);
 }
 
@@ -353,6 +353,19 @@ export function toHaveLength(value: any, length: number): MatchResult {
 
 export function toContain(value: any, item: any): MatchResult {
   if (Array.isArray(value) && value.includes(item)) return { pass: true };
+  if (typeof value === "string" && typeof item === "string") {
+    if (value.includes(item)) {
+      return { pass: true };
+    } else {
+      return buildFail(
+        `expect(${ACTUAL}).toContain(${EXPECTED})\n\n    ${
+          red(
+            value,
+          )
+        } did not contain ${green(item)}`,
+      );
+    }
+  }
 
   const actualString = createStr(value);
   const itemString = createStr(item);
