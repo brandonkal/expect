@@ -786,3 +786,22 @@ Deno.test({
     );
   },
 });
+
+Deno.test("toThrow works with errors", () => {
+  class ValidationError extends Error {
+    public name: string = "ValidationError";
+    public code: number;
+    public message: string;
+
+    constructor(code: number) {
+      super("example validation error");
+      this.code = code;
+      this.message = "example validation error";
+      Object.setPrototypeOf(this, ValidationError.prototype);
+    }
+  }
+  function throwValidation() {
+    throw new ValidationError(10);
+  }
+  expect(throwValidation).toThrow(ValidationError);
+});

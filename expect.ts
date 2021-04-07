@@ -3,6 +3,10 @@ import type { Matcher, Matchers } from "./matchers.ts";
 import { isPromise } from "./utils.ts";
 import { AssertionError } from "https://deno.land/std@0.92.0/testing/asserts.ts";
 
+interface Constructable {
+  new (...args: any[]): any;
+}
+
 interface Expected {
   toBe(candidate: any): void;
   toEqual(candidate: any): void;
@@ -17,7 +21,7 @@ interface Expected {
   toHaveProperty(propName: string): void;
   toHaveLength(length: number): void;
   toContain(item: any): void;
-  toThrow(error?: RegExp | string): void;
+  toThrow(error?: RegExp | string | Error | Constructable): void;
   toThrowError(error?: RegExp | string | ErrorConstructor | Error): void;
   toBeGreaterThan(number: number): void;
   toBeGreaterThanOrEqual(number: number): void;
